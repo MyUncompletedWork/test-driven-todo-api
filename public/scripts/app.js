@@ -1,6 +1,9 @@
 // wait for DOM to load before running JS
 $(document).ready(function() {
 
+  //search API route
+  var searchUrl = '/api/todos/search'
+
   // base API route
   var baseUrl = '/api/todos';
 
@@ -38,12 +41,27 @@ $(document).ready(function() {
       console.log(json);
 
       // set `allTodos` to todo data (json.data) from API
-      allTodos = json.todos;
+      allTodos = json.data;
 
       // render all todos to view
       render();
     }
   });
+
+  //Search todo
+  $("#search").on('submit', function(event){
+    event.preventDefault();
+    $.ajax({
+      method: "GET",
+      url: searchUrl,
+      data: $("#search").serialize(),
+      success: function searchSuccess(json){
+        console.log(json);
+        allTodos = json.data;
+        render();
+      }
+    })
+  })
 
   // listen for submit even on form
   $createTodo.on('submit', function (event) {
